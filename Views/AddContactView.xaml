@@ -1,0 +1,143 @@
+﻿<Window x:Class="Contact_Manager.Views.AddContactView"
+        Name="AddContactWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:conv="clr-namespace:Contact_Manager.Converters"
+        xmlns:val="clr-namespace:Contact_Manager.Validators"
+        mc:Ignorable="d"
+        Title="AddContactView" Height="350" Width="300"
+        WindowStyle="None"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False">
+    <Border BorderBrush="Black"
+            BorderThickness="2">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.Resources>
+                <Style TargetType="Label">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    <Setter Property="Margin" Value="40 0 0 0"/>
+                </Style>
+                <Style x:Key="FormEntry" TargetType="{x:Type Control}">
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="Width" Value="90"/>
+                    <Setter Property="Height" Value="25"/>
+                </Style>
+                
+                <conv:EnumToCollectionConverter x:Key="EnumToCollectionConverter"/>
+                <conv:NotNullConverter x:Key="NotNullConverter"/>
+            </Grid.Resources>
+
+            <Label Grid.Row="0" Content="Name:"/>
+            <Label Grid.Row="1" Content="Last name:"/>
+            <Label Grid.Row="2" Content="Date of birth:"/>
+            <Label Grid.Row="3" Content="Sex:"/>
+            <Label Grid.Row="4" Content="Phone number:"/>
+            <Label Grid.Row="5" Content="City:"/>
+
+            <TextBox Name="Name" Style="{StaticResource FormEntry}" Grid.Row="0" Grid.Column="1">
+                <TextBox.Text>
+                    <Binding Path="Contact.Name" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <val:NotEmptyStringValidator/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox Name="LastName" Style="{StaticResource FormEntry}" Grid.Row="1" Grid.Column="1">
+                <TextBox.Text>
+                    <Binding Path="Contact.LastName" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <val:NotEmptyStringValidator/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <DatePicker Name="Birthday" Style="{StaticResource FormEntry}" Grid.Row="2" Grid.Column="1">
+                <DatePicker.SelectedDate>
+                    <Binding Path="Contact.Birthday" UpdateSourceTrigger="PropertyChanged"/>
+                </DatePicker.SelectedDate>
+            </DatePicker>
+
+            <ComboBox Name="Sex"
+                      ItemsSource="{Binding Path=Contact.Sex, Converter={StaticResource EnumToCollectionConverter}}"
+                      SelectedValuePath="Key"
+                      DisplayMemberPath="Value"
+                      SelectedValue="{Binding Path=Contact.Sex}"
+                      Style="{StaticResource FormEntry}" 
+                      Grid.Row="3" 
+                      Grid.Column="1"/>
+
+            <TextBox Name="PhoneNumber" Style="{StaticResource FormEntry}" Grid.Row="4" Grid.Column="1">
+                <TextBox.Text>
+                    <Binding Path="Contact.PhoneNumber" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <val:NotEmptyStringValidator/>
+                            <val:OnlyDigitValidator/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox Name="City" Style="{StaticResource FormEntry}" Grid.Row="5" Grid.Column="1">
+                <TextBox.Text>
+                    <Binding Path="Contact.City" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <val:NotEmptyStringValidator/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <Button Grid.Row="6"
+                Grid.Column="0"
+                HorizontalAlignment="Right"
+                Margin="0 0 10 0"
+                Width="70"
+                Height="25"
+                Command="{Binding CloseCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                Content="Cancel"/>
+
+            <Button Grid.Row="6"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
+                Margin="10 0 0 0"
+                Width="70"
+                Height="25"
+                Command="{Binding SaveCommand}"
+                CommandParameter="{Binding ElementName=AddContactWindow}" 
+                Content="Add">
+                <Button.IsEnabled>
+                    <MultiBinding Mode="OneWay" Converter="{StaticResource NotNullConverter}">
+                        <Binding Path="Contact.Name" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Path="Contact.LastName" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Path="Contact.PhoneNumber" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Path="Contact.City" UpdateSourceTrigger="PropertyChanged"/>
+                    </MultiBinding>
+                </Button.IsEnabled>
+            </Button>
+        </Grid>
+    </Border>
+</Window>
