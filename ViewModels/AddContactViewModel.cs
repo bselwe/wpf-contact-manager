@@ -1,4 +1,5 @@
 ﻿using Contact_Manager.Helpers;
+using Contact_Manager.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

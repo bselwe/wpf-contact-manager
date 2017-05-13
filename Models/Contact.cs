@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using MvvmHelpers;
 using System.Xml.Serialization;
 
-namespace Contact_Manager
+namespace Contact_Manager.Models
 {
     // ObservableObject not needed since UpdateSourceTrigger is set to LostFocus (default)
     // Set UpdateSourceTrigger to PropertyChanged for instant model update

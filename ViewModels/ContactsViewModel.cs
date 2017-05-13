@@ -1,4 +1,5 @@
 ﻿using Contact_Manager.Helpers;
+using Contact_Manager.Models;
 using Contact_Manager.Services;
 using Contact_Manager.ViewModels;
 using MvvmHelpers;
